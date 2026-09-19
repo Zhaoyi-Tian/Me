@@ -1,0 +1,109 @@
+---
+import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg";
+import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
+import { useTranslations } from "@/i18n";
+
+const t = useTranslations(Astro.currentLocale);
+---
+
+<!-- 与侧栏目录共用 80rem（xl）断点。 -->
+<reading-controls class="contents xl:hidden" data-pagefind-ignore>
+  <div class="fixed inset-x-0 top-0 z-10 h-1 bg-background" aria-hidden="true">
+    <div class="reading-progress h-full bg-accent"></div>
+  </div>
+
+  <div
+    data-back-to-top
+    inert
+    class:list={[
+      "fixed inset-e-4 bottom-8 z-50",
+      "md:sticky md:inset-e-auto md:float-end md:me-1",
+      "translate-y-14 opacity-0 transition duration-500 motion-reduce:transition-none",
+      "data-[visible]:translate-y-0 data-[visible]:opacity-100",
+    ]}
+  >
+    <button
+      type="button"
+      class:list={[
+        "group bg-background relative px-2 py-1",
+        "size-14 rounded-full shadow-xl",
+        "md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none",
+        "md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg",
+      ]}
+    >
+      <span
+        aria-hidden="true"
+        class="reading-progress-ring absolute inset-0 -z-10 block size-14 scale-110 rounded-full md:hidden"
+      ></span>
+      <IconArrowLeft class="inline-block rotate-90 md:hidden" aria-hidden="true" />
+      <span class="group-hover:text-accent sr-only text-sm md:not-sr-only">
+        <IconArrowNarrowUp class="inline-block size-4" aria-hidden="true" />
+        {t.post.backToTop}
+      </span>
+    </button>
+  </div>
+</reading-controls>
+
+<script>
+  class ReadingControls extends HTMLElement {
+    private cleanup?: AbortController;
+    private frame = 0;
+
+    connectedCallback() {
+      this.cleanup = new AbortController();
+      const { signal } = this.cleanup;
+      const root = document.documentElement;
+      const buttonContainer = this.querySelector<HTMLElement>("[data-back-to-top]")!;
+      const button = this.querySelector("button")!;
+      const desktop = window.matchMedia("(min-width: 80rem)");
+
+      const update = () => {
+        this.frame = 0;
+        if (desktop.matches) return;
+
+        const scrollTotal = Math.max(1, root.scrollHeight - root.clientHeight);
+        const progress = Math.max(0, Math.min(1, root.scrollTop / scrollTotal));
+        // 顶部横条和回顶圆环共用同一次计算。
+        this.style.setProperty("--reading-progress", `${progress * 100}%`);
+        const visible = progress > 0.3;
+        buttonContainer.toggleAttribute("data-visible", visible);
+        buttonContainer.inert = !visible;
+      };
+
+      const scheduleUpdate = () => {
+        if (!this.frame) this.frame = requestAnimationFrame(update);
+      };
+      const observer = new ResizeObserver(scheduleUpdate);
+      observer.observe(document.body);
+      signal.addEventListener("abort", () => observer.disconnect(), { once: true });
+
+      button.addEventListener("click", () => window.scrollTo(0, 0), { signal });
+      window.addEventListener("scroll", scheduleUpdate, { passive: true, signal });
+      window.addEventListener("resize", scheduleUpdate, { signal });
+      update();
+    }
+
+    disconnectedCallback() {
+      this.cleanup?.abort();
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+    }
+  }
+
+  if (!customElements.get("reading-controls")) {
+    customElements.define("reading-controls", ReadingControls);
+  }
+</script>
+
+<style>
+  .reading-progress {
+    width: var(--reading-progress, 0%);
+  }
+
+  .reading-progress-ring {
+    background-image: conic-gradient(
+      var(--accent) var(--reading-progress, 0%),
+      transparent var(--reading-progress, 0%)
+    );
+  }
+</style>
