@@ -29,8 +29,32 @@ const { Content } = await render(about);
   <Breadcrumb />
 
   <Main pageTitle={about.data.title} class="app-prose">
-    <Content />
+    <div class="about-content">
+      <Content />
+    </div>
   </Main>
 
   <Footer />
 </Layout>
+
+<style>
+  .about-content :global(h2) {
+    margin-top: 2.75rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .about-content :global(h3) {
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+    opacity: 0.7;
+  }
+
+  .about-content :global(h2 + h3) {
+    margin-top: 0;
+  }
+</style>
