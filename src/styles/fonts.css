@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-VariableItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 300 900;
+  font-display: swap;
+}
+
+/* 正文使用 Satoshi，中文回退到系统字体；代码独立使用系统等宽字体。 */
+@theme inline {
+  --font-app: "Satoshi", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
