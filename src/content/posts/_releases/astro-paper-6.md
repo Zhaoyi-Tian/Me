@@ -50,7 +50,6 @@ export default defineAstroPaperConfig({
   features: {
     lightAndDarkMode: true,
     dynamicOgImage: true,
-    showArchives: true,
     showBackButton: true,
     editPost: { enabled: true, url: "https://github.com/…/edit/main/" },
     search: "pagefind",

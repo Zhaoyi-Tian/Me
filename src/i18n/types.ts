@@ -4,7 +4,6 @@ export interface UIStrings {
     posts: string;
     tags: string;
     about: string;
-    archives: string;
     search: string;
   };
   post: {
@@ -45,9 +44,6 @@ export interface UIStrings {
 
     postsTitle: string;
     postsDesc: string;
-
-    archivesTitle: string;
-    archivesDesc: string;
 
     searchTitle: string;
     searchDesc: string;
