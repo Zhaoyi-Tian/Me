@@ -1,5 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
+import { getCollection } from "astro:content";
 import "@pagefind/default-ui/css/ui.css";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -7,6 +8,7 @@ import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
 import { getAssetPath } from "@/utils/withBase";
+import { postFilter } from "@/utils/postFilter";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -23,6 +25,7 @@ const backUrl = config.features.showBackButton
   : getRelativeLocaleUrl(locale, "");
 
 const pagefindBundlePath = getAssetPath("pagefind/");
+const hasPosts = (await getCollection("posts", postFilter)).length > 0;
 
 const t = useTranslations(locale);
 ---
@@ -33,13 +36,18 @@ const t = useTranslations(locale);
   <Breadcrumb />
 
   <Main pageTitle={t.pages.searchTitle} pageDesc={t.pages.searchDesc}>
-    <div
-      id="pagefind-search"
-      transition:persist
-      data-backurl={backUrl}
-      data-bundle-path={pagefindBundlePath}
-    >
-    </div>
+    {
+      hasPosts ? (
+        <div
+          id="pagefind-search"
+          transition:persist
+          data-backurl={backUrl}
+          data-bundle-path={pagefindBundlePath}
+        />
+      ) : (
+        <p>{t.pages.noPosts}</p>
+      )
+    }
   </Main>
 
   <Footer />

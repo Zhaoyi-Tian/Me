@@ -47,6 +47,7 @@ export interface UIStrings {
 
     searchTitle: string;
     searchDesc: string;
+    noPosts: string;
   };
   a11y: {
     skipToContent: string;

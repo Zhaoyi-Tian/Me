@@ -49,6 +49,7 @@ export default {
 
     searchTitle: "Search",
     searchDesc: "Search any article ...",
+    noPosts: "No articles yet.",
   },
   a11y: {
     skipToContent: "Skip to content",
