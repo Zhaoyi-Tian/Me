@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -9,6 +8,7 @@ import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
+import ProfilePhoto from "@/components/ProfilePhoto.astro";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -34,50 +34,34 @@ const homePath = getRelativeLocaleUrl(locale, "");
     class="app-layout my-1"
   >
     <section id="hero" class="border-border border-b pt-8 pb-6">
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Mingalaba
-      </h1>
-      <a
-        target="_blank"
-        href={`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`}
-        class="inline-block"
-        aria-label="RSS Feed"
-        title="RSS Feed"
-      >
-        <IconRss
-          width={20}
-          height={20}
-          class="stroke-accent scale-125 stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
+      <div>
+        <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
+          Zhaoyi Tian
+        </h1>
 
-      <p>
-        AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro
-        blog theme. This theme follows best practices and provides accessibility
-        out of the box. Light and dark mode are supported by default. Moreover,
-        additional color schemes can also be configured.
-      </p>
-      <p class="mt-2">
-        Read the blog posts or check{" "}
-        <LinkButton
-          class="hover:text-accent underline decoration-dashed underline-offset-4"
-          href="https://github.com/satnaing/astro-paper#readme"
-        >
-          README
-        </LinkButton>{" "}
-        for more info.
-      </p>
-      {
-        socials.length > 0 && (
-          <div class="mt-4 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">
-              {t.home.socialLinks}:
-            </div>
-            <Socials />
-          </div>
-        )
-      }
+        <p>
+          I'm an undergraduate in Intelligent Science and Technology at Peking
+          University, interested in continual learning and self-improving agents.
+          I hope to build AI that keeps learning through interaction with the
+          world.
+        </p>
+        <p class="mt-2">
+          I'm currently interning at Norizon AI, exploring real-time RSI.
+        </p>
+        <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+          {socials.length > 0 && <Socials />}
+          <LinkButton
+            href={getRelativeLocaleUrl(locale, "about")}
+            class="text-sm"
+          >
+            More about me
+            <IconArrowRight class="size-4 rtl:-rotate-180" aria-hidden="true" />
+          </LinkButton>
+        </div>
+      </div>
+      <div class="intro-portrait">
+        <ProfilePhoto />
+      </div>
     </section>
 
     {
@@ -125,6 +109,32 @@ const homePath = getRelativeLocaleUrl(locale, "");
   </main>
   <Footer />
 </Layout>
+
+<style>
+  #hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .intro-portrait {
+    grid-row: 1;
+    margin-top: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    #hero {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: 2.5rem;
+    }
+
+    .intro-portrait {
+      grid-row: auto;
+      margin: 1rem 0;
+    }
+  }
+</style>
 
 <script>
   document.addEventListener("astro:page-load", () => {
