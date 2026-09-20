@@ -5,14 +5,15 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
-import { getPostSlug } from "@/utils/getPostPaths";
 import { getPosts } from "@/utils/getPosts";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
 import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
 import ReadingControls from "./_components/ReadingControls.astro";
-import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
+import AdjacentPostNav, {
+  type AdjacentPost,
+} from "./_components/AdjacentPostNav.astro";
 import TableOfContents from "./_components/TableOfContents.astro";
 import config from "@/config";
 
@@ -20,7 +21,7 @@ export async function getStaticPaths() {
   const posts = await getPosts();
 
   return posts.map((post, index) => ({
-    params: { slug: getPostSlug(post.id, post.filePath) },
+    params: { slug: post.data.slug },
     props: {
       post,
       // posts is newest-first, so "older" (prev) is a higher index
@@ -28,33 +29,25 @@ export async function getStaticPaths() {
       prevPost:
         index < posts.length - 1
           ? {
-              id: posts[index + 1].id,
+              slug: posts[index + 1].data.slug,
               title: posts[index + 1].data.title,
-              filePath: posts[index + 1].filePath,
             }
           : null,
       nextPost:
         index > 0
           ? {
-              id: posts[index - 1].id,
+              slug: posts[index - 1].data.slug,
               title: posts[index - 1].data.title,
-              filePath: posts[index - 1].filePath,
             }
           : null,
     },
   }));
 }
 
-type AdjacentPost = {
-  id: string;
-  title: string;
-  filePath: string | undefined;
-} | null;
-
 type Props = {
   post: CollectionEntry<"posts">;
-  prevPost: AdjacentPost;
-  nextPost: AdjacentPost;
+  prevPost: AdjacentPost | null;
+  nextPost: AdjacentPost | null;
 };
 
 const { post, prevPost, nextPost } = Astro.props;
@@ -93,7 +86,7 @@ const ogImage = new URL(
     data-pagefind-body
   >
     <h1
-      style={{ viewTransitionName: toTransitionName(post.id) }}
+      style={{ viewTransitionName: toTransitionName(post.data.slug) }}
       class="text-accent inline-block text-2xl font-bold sm:text-3xl"
     >
       {title}
