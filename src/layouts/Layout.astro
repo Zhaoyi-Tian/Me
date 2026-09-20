@@ -1,6 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
+import siteOgImage from "@/assets/images/site-og.jpg";
 import { getAssetPath } from "@/utils/withBase";
 import config from "@/config";
 import "@/styles/global.css";
@@ -17,7 +17,7 @@ const { site } = config;
 const {
   title = site.title,
   description = site.description,
-  ogImage = resolveDefaultOgImagePath(config),
+  ogImage = siteOgImage.src,
   ogType = "website",
 } = Astro.props;
 

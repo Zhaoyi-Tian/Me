@@ -7,7 +7,6 @@ export default defineAstroPaperConfig({
     description: "Welcome, noble and pure soul.",
     author: "Zhaoyi Tian",
     profile: "https://zhaoyi-tian.cn/about/",
-    ogImage: "default-og.jpg",
     lang: "en",
     timezone: "Asia/Shanghai",
     dir: "ltr",
@@ -18,7 +17,6 @@ export default defineAstroPaperConfig({
   },
   features: {
     lightAndDarkMode: true,
-    dynamicOgImage: true,
     showBackButton: true,
     search: "pagefind",
   },
