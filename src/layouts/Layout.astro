@@ -2,7 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import siteOgImage from "@/assets/images/site-og.jpg";
 import { getAssetPath } from "@/utils/withBase";
-import config from "@/config";
+import config from "@/astro-paper.config";
 import "@/styles/global.css";
 
 type Props = {
@@ -27,7 +27,7 @@ const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
 
 <!doctype html>
 <html
-  dir={site.dir ?? "ltr"}
+  dir={site.dir}
   lang={Astro.currentLocale ?? site.lang}
   class="overflow-y-scroll scroll-smooth"
 >
@@ -65,15 +65,6 @@ const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
 
     <!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->
     <slot name="head" />
-
-    {
-      site.googleVerification && (
-        <meta
-          name="google-site-verification"
-          content={site.googleVerification}
-        />
-      )
-    }
 
     <!--
       Inline FOUC-prevention script: sets data-theme on <html> before

@@ -1,7 +1,7 @@
 ---
 import LinkButton from "@/components/LinkButton.astro";
-import { tplStr, useTranslations } from "@/i18n";
-import config from "@/config";
+import { useTranslations } from "@/i18n";
+import config from "@/astro-paper.config";
 
 const { shareLinks } = config;
 const t = useTranslations(Astro.currentLocale);
@@ -12,19 +12,11 @@ const icons = import.meta.glob<{
 
 const pageUrl = Astro.url;
 
-const platformLabel = (name: string) =>
-  name.charAt(0).toUpperCase() + name.slice(1);
-
 const items = await Promise.all(
   shareLinks.map(async ({ name, url, linkTitle }) => {
     const mod = await icons[`/src/assets/icons/socials/${name}.svg`]?.();
     const Icon = mod?.default;
-    const title =
-      linkTitle ??
-      (name === "mail"
-        ? t.post.sharePostViaEmail
-        : tplStr(t.post.sharePostOn, { platform: platformLabel(name) }));
-    return { url, title, Icon };
+    return { url, title: linkTitle, Icon };
   })
 );
 ---

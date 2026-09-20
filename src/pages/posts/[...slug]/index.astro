@@ -15,7 +15,6 @@ import AdjacentPostNav, {
   type AdjacentPost,
 } from "./_components/AdjacentPostNav.astro";
 import TableOfContents from "./_components/TableOfContents.astro";
-import config from "@/config";
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -82,7 +81,7 @@ const ogImage = new URL(
 
   <main
     id="main-content"
-    class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
+    class="app-layout"
     data-pagefind-body
   >
     <h1

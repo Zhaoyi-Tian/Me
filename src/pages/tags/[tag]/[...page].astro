@@ -11,7 +11,7 @@ import { getUniqueTags } from "@/utils/getUniqueTags";
 import { getPosts } from "@/utils/getPosts";
 import { slugifyAll } from "@/utils/slugify";
 import { useTranslations } from "@/i18n";
-import config from "@/config";
+import config from "@/astro-paper.config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getPosts();

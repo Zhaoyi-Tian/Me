@@ -1,6 +1,6 @@
-import { defineAstroPaperConfig } from "./src/types/config";
+import type { AstroPaperConfig } from "./src/types/config";
 
-export default defineAstroPaperConfig({
+export default {
   site: {
     url: "https://zhaoyi-tian.cn/",
     title: "Zhaoyi's Site",
@@ -15,11 +15,6 @@ export default defineAstroPaperConfig({
     perPage: 4,
     perIndex: 4,
   },
-  features: {
-    lightAndDarkMode: true,
-    showBackButton: true,
-    search: "pagefind",
-  },
   socials: [
     {
       name: "github",
@@ -33,11 +28,35 @@ export default defineAstroPaperConfig({
     },
   ],
   shareLinks: [
-    { name: "whatsapp", url: "https://wa.me/?text=" },
-    { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },
-    { name: "x",        url: "https://x.com/intent/post?url=" },
-    { name: "telegram", url: "https://t.me/share/url?url=" },
-    { name: "pinterest", url: "https://pinterest.com/pin/create/button/?url=" },
-    { name: "mail",     url: "mailto:?subject=See%20this%20post&body=" },
+    {
+      name: "whatsapp",
+      url: "https://wa.me/?text=",
+      linkTitle: "Share this post on WhatsApp",
+    },
+    {
+      name: "facebook",
+      url: "https://www.facebook.com/sharer.php?u=",
+      linkTitle: "Share this post on Facebook",
+    },
+    {
+      name: "x",
+      url: "https://x.com/intent/post?url=",
+      linkTitle: "Share this post on X",
+    },
+    {
+      name: "telegram",
+      url: "https://t.me/share/url?url=",
+      linkTitle: "Share this post on Telegram",
+    },
+    {
+      name: "pinterest",
+      url: "https://pinterest.com/pin/create/button/?url=",
+      linkTitle: "Share this post on Pinterest",
+    },
+    {
+      name: "mail",
+      url: "mailto:?subject=See%20this%20post&body=",
+      linkTitle: "Share this post via email",
+    },
   ],
-});
+} satisfies AstroPaperConfig;

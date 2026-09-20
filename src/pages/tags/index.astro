@@ -8,7 +8,7 @@ import Tag from "@/components/Tag.astro";
 import { getPosts } from "@/utils/getPosts";
 import { getUniqueTags } from "@/utils/getUniqueTags";
 import { useTranslations } from "@/i18n";
-import config from "@/config";
+import config from "@/astro-paper.config";
 
 const posts = await getPosts();
 const tags = getUniqueTags(posts);

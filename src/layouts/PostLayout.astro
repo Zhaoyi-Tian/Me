@@ -1,6 +1,6 @@
 ---
 import Layout from "./Layout.astro";
-import config from "@/config";
+import config from "@/astro-paper.config";
 
 type Props = {
   title: string;
@@ -23,7 +23,7 @@ const structuredData = {
     {
       "@type": "Person",
       name: site.author,
-      ...(site.profile && { url: site.profile }),
+      url: site.profile,
     },
   ],
 };
