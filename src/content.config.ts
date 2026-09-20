@@ -10,10 +10,15 @@ const posts = defineCollection({
     generateId: ({ entry }) => entry,
   }),
   schema: ({ image }) =>
-    z.object({
-      slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
-        message: "slug must use lowercase letters, numbers and single hyphens",
-      }),
+    z.strictObject({
+      slug: z
+        .string()
+        .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
+          message: "slug must use lowercase letters, numbers and single hyphens",
+        })
+        .refine(slug => !/^\d+$/.test(slug), {
+          message: "Numeric-only slugs are reserved for Writing pagination",
+        }),
       pubDatetime: z.date(),
       title: z.string(),
       featured: z.boolean().optional(),
@@ -25,7 +30,7 @@ const posts = defineCollection({
 
 const pages = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/pages" }),
-  schema: z.object({
+  schema: z.strictObject({
     title: z.string(),
     description: z.string().optional(),
   }),
