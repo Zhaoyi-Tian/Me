@@ -1,15 +1,14 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
+import { type CollectionEntry, render } from "astro:content";
 import PostLayout from "@/layouts/PostLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
-import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
-import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPostSlug } from "@/utils/getPostPaths";
+import { getPosts } from "@/utils/getPosts";
 import { slugifyStr } from "@/utils/slugify";
 import { toTransitionName } from "@/utils/toTransitionName";
-import EditPost from "./_components/EditPost.astro";
 import ShareLinks from "./_components/ShareLinks.astro";
 import BackButton from "./_components/BackButton.astro";
 import ReadingControls from "./_components/ReadingControls.astro";
@@ -18,29 +17,28 @@ import TableOfContents from "./_components/TableOfContents.astro";
 import config from "@/config";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("posts");
-  const sortedPosts = getSortedPosts(posts);
+  const posts = await getPosts();
 
-  return sortedPosts.map((post, index) => ({
+  return posts.map((post, index) => ({
     params: { slug: getPostSlug(post.id, post.filePath) },
     props: {
       post,
-      // sortedPosts is newest-first, so "older" (prev) is a higher index
+      // posts is newest-first, so "older" (prev) is a higher index
       // and "newer" (next) is a lower index.
       prevPost:
-        index < sortedPosts.length - 1
+        index < posts.length - 1
           ? {
-              id: sortedPosts[index + 1].id,
-              title: sortedPosts[index + 1].data.title,
-              filePath: sortedPosts[index + 1].filePath,
+              id: posts[index + 1].id,
+              title: posts[index + 1].data.title,
+              filePath: posts[index + 1].filePath,
             }
           : null,
       nextPost:
         index > 0
           ? {
-              id: sortedPosts[index - 1].id,
-              title: sortedPosts[index - 1].data.title,
-              filePath: sortedPosts[index - 1].filePath,
+              id: posts[index - 1].id,
+              title: posts[index - 1].data.title,
+              filePath: posts[index - 1].filePath,
             }
           : null,
     },
@@ -60,52 +58,30 @@ type Props = {
 };
 
 const { post, prevPost, nextPost } = Astro.props;
-const locale = Astro.currentLocale ?? config.site.lang;
 
 const {
   title,
   description,
   ogImage: initOgImage,
-  canonicalURL,
   pubDatetime,
-  modDatetime,
-  timezone,
   tags,
-  hideEditPost,
 } = post.data;
 
 const { Content, headings } = await render(post);
 const tocHeadings = headings.filter(({ depth }) => depth === 2 || depth === 3);
 const showToc = tocHeadings.length > 0;
 
-let ogImageUrl: string | undefined;
-
-if (typeof initOgImage === "string") {
-  ogImageUrl = initOgImage;
-} else if (initOgImage?.src) {
-  ogImageUrl = initOgImage.src;
-}
-
-if (!ogImageUrl && config.features.dynamicOgImage) {
-  const postUrl = getPostUrl(post.id, post.filePath, locale).replace(
-    /\/+$/,
-    ""
-  );
-  ogImageUrl = `${postUrl}/index.png`;
-}
-
-const ogImage = ogImageUrl
-  ? new URL(ogImageUrl, Astro.url.origin).href
-  : undefined;
+const ogImage = new URL(
+  typeof initOgImage === "string" ? initOgImage : initOgImage.src,
+  Astro.site ?? Astro.url
+).href;
 ---
 
 <PostLayout
-  title={`${title} | ${config.site.title}`}
-  description={description}
-  ogImage={ogImage}
-  canonicalURL={canonicalURL}
-  pubDatetime={pubDatetime}
-  modDatetime={modDatetime}
+  {title}
+  {description}
+  {ogImage}
+  {pubDatetime}
 >
   <Header />
 
@@ -123,19 +99,7 @@ const ogImage = ogImageUrl
       {title}
     </h1>
 
-    <div class="my-2 flex items-center gap-2">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span
-        aria-hidden="true"
-        class:list={[
-          "text-muted-foreground max-sm:hidden",
-          { hidden: !config.features.editPost?.enabled || hideEditPost },
-        ]}
-      >
-        |
-      </span>
-      <EditPost {hideEditPost} {post} class="max-sm:hidden" />
-    </div>
+    <Datetime {pubDatetime} size="lg" class="my-2" />
 
     <div class="relative mt-8">
       {showToc && <TableOfContents headings={tocHeadings} />}
@@ -154,13 +118,15 @@ const ogImage = ogImageUrl
 
     <hr class="my-8 border-dashed" />
 
-    <EditPost class="sm:hidden" {hideEditPost} {post} />
-
     <ReadingControls />
 
-    <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
-    </ul>
+    {
+      tags.length > 0 && (
+        <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
+          {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
+        </ul>
+      )
+    }
 
     <ShareLinks />
 

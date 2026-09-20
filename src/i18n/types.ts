@@ -8,13 +8,11 @@ export interface UIStrings {
   };
   post: {
     tableOfContents: string;
-    updatedAt: string;
     sharePostIntro: string;
     sharePostOn: string;
     sharePostViaEmail: string;
     backToTop: string;
     goBack: string;
-    editPage: string;
     previousPost: string;
     nextPost: string;
   };

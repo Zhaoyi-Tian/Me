@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
@@ -9,7 +8,7 @@ import Socials from "@/components/Socials.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import ProfilePhoto from "@/components/ProfilePhoto.astro";
-import { getSortedPosts } from "@/utils/getSortedPosts";
+import { getPosts } from "@/utils/getPosts";
 import { getAssetPath } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -19,10 +18,9 @@ const { socials, posts: postsConfig } = config;
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
-const posts = await getCollection("posts");
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const posts = await getPosts();
+const featuredPosts = posts.filter(({ data }) => data.featured);
+const recentPosts = posts.filter(({ data }) => !data.featured);
 const homePath = getRelativeLocaleUrl(locale, "");
 ---
 
@@ -112,7 +110,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
     }
 
     {
-      sortedPosts.length > 0 && (
+      posts.length > 0 && (
         <div class="my-8 text-center">
           <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>
             {t.home.allPosts}

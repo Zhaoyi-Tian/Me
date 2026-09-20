@@ -26,32 +26,18 @@ interface PostsConfig {
   perPage?: number;
   /** Posts shown on the index/home page */
   perIndex?: number;
-  /**
-   * Scheduled posts within this window (ms) of their pubDatetime
-   * are shown as published. Defaults to 15 minutes.
-   */
-  scheduledPostMargin?: number;
 }
 
 interface FeaturesConfig {
   /** Enable light/dark mode toggle. Defaults to true. */
   lightAndDarkMode?: boolean;
   /**
-   * Generate dynamic OG images per post and provide `/og.png` when the static
-   * `public/{site.ogImage}` file is absent. When false, that file is required
-   * for the default layout OG image (build fails if missing).
+   * Allow `/og.png` as the site fallback when `public/{site.ogImage}` is absent.
+   * When false, the static file is required (build fails if missing).
    */
   dynamicOgImage?: boolean;
   /** Show back button on post detail pages. Defaults to true. */
   showBackButton?: boolean;
-  /** "Edit page" link shown on post detail pages. */
-  editPost?:
-    | {
-        enabled: true;
-        /** Base URL for the edit link, e.g. GitHub edit URL */
-        url: string;
-      }
-    | { enabled: false };
   /**
    * Search provider. "pagefind" ships in the base template.
    * Set to false to disable search entirely.
