@@ -8,12 +8,10 @@ export interface UIStrings {
   };
   post: {
     tableOfContents: string;
-    publishedAt: string;
     updatedAt: string;
     sharePostIntro: string;
     sharePostOn: string;
     sharePostViaEmail: string;
-    tagLabel: string;
     backToTop: string;
     goBack: string;
     editPage: string;
@@ -26,7 +24,6 @@ export interface UIStrings {
     page: string;
   };
   home: {
-    socialLinks: string;
     featured: string;
     recentPosts: string;
     allPosts: string;
@@ -54,8 +51,6 @@ export interface UIStrings {
     openMenu: string;
     closeMenu: string;
     toggleTheme: string;
-    searchPlaceholder: string;
-    noResults: string;
     goToPreviousPage: string;
     goToNextPage: string;
   };
