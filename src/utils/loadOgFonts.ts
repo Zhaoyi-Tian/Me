@@ -3,7 +3,7 @@ import type { Font } from "satori";
 
 let fonts: Promise<Font[]> | undefined;
 
-// 分享图需要静态字重；这两份字体由同目录的 Satoshi-Variable.ttf 导出。
+// 分享图使用静态 TTF；网页使用同字体的可变 WOFF2。
 export function loadOgFonts(): Promise<Font[]> {
   return (fonts ??= Promise.all([
     readFile("public/fonts/Satoshi-Regular.ttf"),
