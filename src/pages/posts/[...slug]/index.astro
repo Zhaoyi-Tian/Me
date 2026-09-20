@@ -78,33 +78,31 @@ const ogImage = new URL(
 
   <BackButton />
 
-  <main
-    id="main-content"
-    class="app-layout"
-    data-pagefind-body
-  >
-    <h1
-      style={{ viewTransitionName: `post-${post.data.slug}` }}
-      class="text-accent inline-block text-2xl font-bold sm:text-3xl"
-    >
-      {title}
-    </h1>
-
-    <Datetime {pubDatetime} size="lg" class="my-2" />
-
-    <div class="relative mt-8">
-      {showToc && <TableOfContents headings={tocHeadings} />}
-      <article
-        id="article"
-        class:list={[
-          "app-prose max-w-app w-full",
-          "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
-        ]}
+  <main id="main-content" class="app-layout">
+    <div data-pagefind-body>
+      <h1
+        style={{ viewTransitionName: `post-${post.data.slug}` }}
+        class="text-accent inline-block text-2xl font-bold sm:text-3xl"
       >
-        <article-content class="contents">
-          <Content />
-        </article-content>
-      </article>
+        {title}
+      </h1>
+
+      <Datetime {pubDatetime} size="lg" class="my-2" />
+
+      <div class="relative mt-8">
+        {showToc && <TableOfContents headings={tocHeadings} />}
+        <article
+          id="article"
+          class:list={[
+            "app-prose max-w-app w-full",
+            "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
+          ]}
+        >
+          <article-content class="contents">
+            <Content />
+          </article-content>
+        </article>
+      </div>
     </div>
 
     <hr class="my-8 border-dashed" />
