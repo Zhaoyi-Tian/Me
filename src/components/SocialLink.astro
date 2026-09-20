@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import LinkButton from "./LinkButton.astro";
+
+type Props = HTMLAttributes<"a"> & { icon: string; title: string };
+
+const { icon, title, class: className, ...attrs } = Astro.props;
+const icons = import.meta.glob<{
+  default: (_props: Record<string, unknown>) => unknown;
+}>("/src/assets/icons/socials/*.svg", { eager: true });
+const Icon = icons[`/src/assets/icons/socials/${icon}.svg`]?.default;
+if (!Icon) {
+  throw new Error(
+    `Unknown social icon "${icon}". Use an SVG filename from src/assets/icons/socials/.`
+  );
+}
+---
+
+<LinkButton
+  {...attrs}
+  {title}
+  class:list={["p-2 hover:rotate-6 sm:p-1", className]}
+>
+  <Icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
+  <span class="sr-only">{title}</span>
+</LinkButton>
