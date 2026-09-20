@@ -10,7 +10,6 @@ export default {
     tableOfContents: "Contents",
     sharePostIntro: "Share this post:",
     backToTop: "Back to top",
-    goBack: "Go back",
     previousPost: "Previous Post",
     nextPost: "Next Post",
   },

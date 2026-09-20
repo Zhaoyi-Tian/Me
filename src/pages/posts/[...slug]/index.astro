@@ -7,7 +7,7 @@ import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
 import { getPosts } from "@/utils/getPosts";
 import ShareLinks from "./_components/ShareLinks.astro";
-import BackButton from "./_components/BackButton.astro";
+import WritingLink from "./_components/WritingLink.astro";
 import ReadingControls from "./_components/ReadingControls.astro";
 import AdjacentPostNav, {
   type AdjacentPost,
@@ -47,7 +47,7 @@ const showToc = tocHeadings.length > 0;
 <PostLayout data={post.data}>
   <Header />
 
-  <BackButton />
+  <WritingLink />
 
   <main id="main-content" class="app-layout">
     <div data-pagefind-body>

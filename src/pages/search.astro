@@ -22,12 +22,18 @@ const hasPosts = (await getPosts()).length > 0;
   <Main pageTitle={ui.pages.searchTitle} pageDesc={ui.pages.searchDesc}>
     {
       hasPosts ? (
-        <div
-          id="pagefind-search"
-          transition:persist
-          data-backurl={Astro.url.pathname}
-          data-bundle-path={pagefindBundlePath}
-        />
+        <>
+          {import.meta.env.DEV && (
+            <p class="mb-4 rounded bg-muted/75 p-4">
+              Run <code>npm run build</code> to refresh search results during development.
+            </p>
+          )}
+          <pagefind-search
+            id="pagefind-search"
+            class="block"
+            data-bundle-path={pagefindBundlePath}
+          />
+        </>
       ) : (
         <p>{ui.pages.noPosts}</p>
       )
@@ -38,80 +44,63 @@ const hasPosts = (await getPosts()).length > 0;
 </Layout>
 
 <script>
-  function initSearch() {
-    const pageFindSearch: HTMLElement | null =
-      document.querySelector("#pagefind-search");
+  class PagefindSearch extends HTMLElement {
+    private cleanup?: AbortController;
+    private search?: { destroy(): void };
 
-    if (!pageFindSearch) return;
-
-    const bundlePath = pageFindSearch?.dataset?.bundlePath;
-    if (!bundlePath) return;
-
-    const params = new URLSearchParams(window.location.search);
-
-    const onIdle = window.requestIdleCallback || (cb => setTimeout(cb, 1));
-
-    onIdle(async () => {
+    async connectedCallback() {
+      const { signal } = (this.cleanup = new AbortController());
       // @ts-expect-error — Missing types for @pagefind/default-ui package.
       const { PagefindUI } = await import("@pagefind/default-ui");
+      if (signal.aborted) return;
 
-      // Display warning in dev mode
-      if (import.meta.env.DEV) {
-        pageFindSearch.innerHTML = `
-            <div class="bg-muted/75 rounded p-4 space-y-4 mb-4">
-              <p><strong>DEV mode Warning! </strong>You need to build the project at least once to see the search results during development.</p>
-              <code class="block bg-black text-white px-2 py-1 rounded">npm run build</code>
-            </div>
-          `;
-      }
-
-      // Init pagefind ui
       const search = new PagefindUI({
-        element: "#pagefind-search",
-        bundlePath,
+        element: this,
+        bundlePath: this.dataset.bundlePath,
         showImages: false,
         showSubResults: true,
-        processTerm: function (term: string) {
-          params.set("q", term); // Update the `q` parameter in the URL
-          history.replaceState(history.state, "", "?" + params.toString()); // Push the new URL without reloading
-
-          const backUrl =
-            pageFindSearch?.dataset?.backurl ?? window.location.pathname;
-          sessionStorage.setItem("backUrl", `${backUrl}?${params.toString()}`);
-
-          return term;
-        },
       });
+      this.search = search;
 
-      // If search param exists (eg: search?q=astro), trigger search
-      const query = params.get("q");
-      if (query) {
-        search.triggerSearch(query);
-      }
+      const query = new URL(window.location.href).searchParams.get("q");
+      if (query) search.triggerSearch(query);
 
-      // Reset search param if search input is cleared
-      const searchInput = document.querySelector(".pagefind-ui__search-input");
-      const clearButton = document.querySelector(".pagefind-ui__search-clear");
-      searchInput?.addEventListener("input", resetSearchParam);
-      clearButton?.addEventListener("click", resetSearchParam);
-
-      function resetSearchParam(e: Event) {
-        if ((e.target as HTMLInputElement)?.value.trim() === "") {
-          history.replaceState(history.state, "", window.location.pathname);
+      this.addEventListener("input", event => {
+        if (event.target instanceof HTMLInputElement) {
+          this.updateQuery(event.target.value);
         }
-      }
-    });
+      }, { signal });
+      // Pagefind clears its input without emitting an input event in these cases.
+      this.addEventListener("click", event => {
+        if (event.target instanceof Element &&
+            event.target.closest(".pagefind-ui__search-clear")) {
+          this.updateQuery("");
+        }
+      }, { signal });
+      this.addEventListener("keydown", event => {
+        if (event.key === "Escape" && event.target instanceof HTMLInputElement) {
+          this.updateQuery("");
+        }
+      }, { signal });
+    }
+
+    private updateQuery(term: string) {
+      const url = new URL(window.location.href);
+      if (term) url.searchParams.set("q", term);
+      else url.searchParams.delete("q");
+      history.replaceState(history.state, "", url);
+    }
+
+    disconnectedCallback() {
+      this.cleanup?.abort();
+      this.search?.destroy();
+      this.search = undefined;
+    }
   }
 
-  document.addEventListener("astro:after-swap", () => {
-    const pagefindSearch = document.querySelector("#pagefind-search");
-
-    // if pagefind search form already exists, don't initialize search component
-    if (pagefindSearch && pagefindSearch.querySelector("form")) return;
-
-    initSearch();
-  });
-  initSearch();
+  if (!customElements.get("pagefind-search")) {
+    customElements.define("pagefind-search", PagefindSearch);
+  }
 </script>
 
 <style is:global>

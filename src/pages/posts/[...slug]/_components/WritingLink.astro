@@ -1,0 +1,16 @@
+---
+import { withBase } from "@/utils/withBase";
+import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
+import LinkButton from "@/components/LinkButton.astro";
+import ui from "@/ui";
+---
+
+<div class="app-layout flex items-center justify-start">
+  <LinkButton
+    href={withBase("posts/")}
+    class="focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"
+  >
+    <IconChevronLeft class="inline-block size-6" />
+    <span>{ui.nav.posts}</span>
+  </LinkButton>
+</div>
