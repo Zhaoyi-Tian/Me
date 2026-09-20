@@ -1,24 +1,27 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import Layout from "./Layout.astro";
 import config from "@/astro-paper.config";
 
 type Props = {
-  title: string;
-  description: string;
-  ogImage: string;
-  pubDatetime: Date;
+  data: CollectionEntry<"posts">["data"];
 };
 
 const { site } = config;
 
-const { title, description, ogImage, pubDatetime } = Astro.props;
+const { title, description, ogImage, pubDatetime } = Astro.props.data;
+const socialImageURL = new URL(
+  typeof ogImage === "string" ? ogImage : ogImage.src,
+  Astro.site
+);
+const published = pubDatetime.toISOString();
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   headline: title,
-  image: ogImage,
-  datePublished: pubDatetime.toISOString(),
+  image: socialImageURL.href,
+  datePublished: published,
   author: [
     {
       "@type": "Person",
@@ -32,13 +35,13 @@ const structuredData = {
 <Layout
   title={`${title} | ${site.title}`}
   {description}
-  {ogImage}
+  ogImage={socialImageURL}
   ogType="article"
 >
   <Fragment slot="head">
     <meta
       property="article:published_time"
-      content={pubDatetime.toISOString()}
+      content={published}
     />
 
     <script

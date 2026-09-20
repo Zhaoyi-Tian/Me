@@ -23,20 +23,8 @@ export async function getStaticPaths() {
       post,
       // posts is newest-first, so "older" (prev) is a higher index
       // and "newer" (next) is a lower index.
-      prevPost:
-        index < posts.length - 1
-          ? {
-              slug: posts[index + 1].data.slug,
-              title: posts[index + 1].data.title,
-            }
-          : null,
-      nextPost:
-        index > 0
-          ? {
-              slug: posts[index - 1].data.slug,
-              title: posts[index - 1].data.title,
-            }
-          : null,
+      prevPost: posts[index + 1]?.data ?? null,
+      nextPost: posts[index - 1]?.data ?? null,
     },
   }));
 }
@@ -49,30 +37,14 @@ type Props = {
 
 const { post, prevPost, nextPost } = Astro.props;
 
-const {
-  title,
-  description,
-  ogImage: initOgImage,
-  pubDatetime,
-  tags,
-} = post.data;
+const { title, pubDatetime, tags } = post.data;
 
 const { Content, headings } = await render(post);
 const tocHeadings = headings.filter(({ depth }) => depth === 2 || depth === 3);
 const showToc = tocHeadings.length > 0;
-
-const ogImage = new URL(
-  typeof initOgImage === "string" ? initOgImage : initOgImage.src,
-  Astro.site ?? Astro.url
-).href;
 ---
 
-<PostLayout
-  {title}
-  {description}
-  {ogImage}
-  {pubDatetime}
->
+<PostLayout data={post.data}>
   <Header />
 
   <BackButton />

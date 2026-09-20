@@ -1,13 +1,11 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { getPostUrl } from "@/utils/getPostUrl";
 import ui from "@/ui";
 
-export type AdjacentPost = {
-  slug: string;
-  title: string;
-};
+export type AdjacentPost = Pick<CollectionEntry<"posts">["data"], "slug" | "title">;
 
 type Props = {
   prevPost: AdjacentPost | null;

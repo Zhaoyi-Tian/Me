@@ -46,7 +46,7 @@ const { page, tag } = Astro.props;
     pageDesc={`${ui.pages.tagDesc} "${tag}".`}
   >
     <ul>
-      {page.data.map(data => <Card {...data} />)}
+      {page.data.map(post => <Card data={post.data} />)}
     </ul>
   </Main>
 

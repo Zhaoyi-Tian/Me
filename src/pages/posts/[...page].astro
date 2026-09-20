@@ -29,7 +29,7 @@ const { page } = Astro.props;
   <Main pageTitle={ui.pages.postsTitle} pageDesc={ui.pages.postsDesc}>
     {
       page.data.length > 0 ? (
-        <ul>{page.data.map(data => <Card {...data} />)}</ul>
+        <ul>{page.data.map(post => <Card data={post.data} />)}</ul>
       ) : (
         <p>{ui.pages.noPosts}</p>
       )

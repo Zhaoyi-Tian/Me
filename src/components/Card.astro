@@ -4,8 +4,9 @@ import { getPostUrl } from "@/utils/getPostUrl";
 import Datetime from "./Datetime.astro";
 
 type Props = {
+  data: CollectionEntry<"posts">["data"];
   variant?: "h2" | "h3";
-} & CollectionEntry<"posts">;
+};
 
 const { variant: Heading = "h2", data } = Astro.props;
 

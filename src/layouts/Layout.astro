@@ -8,7 +8,7 @@ import "@/styles/global.css";
 type Props = {
   title?: string;
   description?: string;
-  ogImage?: string;
+  ogImage?: URL;
   ogType?: "website" | "article";
 };
 
@@ -17,12 +17,11 @@ const { site } = config;
 const {
   title = site.title,
   description = site.description,
-  ogImage = siteOgImage.src,
+  ogImage = new URL(siteOgImage.src, Astro.site),
   ogType = "website",
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
-const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
 ---
 
 <!doctype html>
@@ -47,14 +46,14 @@ const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={socialImageURL} />
+    <meta property="og:image" content={ogImage} />
 
     <!-- Twitter / X -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={socialImageURL} />
+    <meta property="twitter:image" content={ogImage} />
 
     <!-- Filled at runtime by theme.ts to match the current background colour -->
     <meta name="theme-color" content="" />

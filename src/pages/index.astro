@@ -82,8 +82,8 @@ const homePath = withBase("");
             {ui.home.featured}
           </h2>
           <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
+            {featuredPosts.map(post => (
+              <Card variant="h3" data={post.data} />
             ))}
           </ul>
         </section>
@@ -97,8 +97,8 @@ const homePath = withBase("");
             {ui.home.recentPosts}
           </h2>
           <ul>
-            {recentPosts.slice(0, postsConfig.perIndex).map(data => (
-              <Card variant="h3" {...data} />
+            {recentPosts.slice(0, postsConfig.perIndex).map(post => (
+              <Card variant="h3" data={post.data} />
             ))}
           </ul>
         </section>
