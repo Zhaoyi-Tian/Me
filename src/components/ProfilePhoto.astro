@@ -1,19 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import portrait from "@/assets/images/profile.jpg";
-
-// 相纸夹在两个圈之间：长圈在纸后，短圈压在正面，纸边自然遮住后圈。
-const backWire = "M34 23v33a13 13 0 0 1-26 0V18";
-const frontWire = "M8 18a10 10 0 0 1 20 0v34a6 6 0 0 1-12 0V23";
+import paperclip from "@/assets/images/paperclip.webp";
 ---
 
 <figure class="profile-photo">
-  <svg class="paperclip back" viewBox="0 0 42 76" aria-hidden="true">
-    <path class="wire-edge" d={backWire} />
-    <path class="wire-body" d={backWire} />
-    <path class="wire-light" d={backWire} />
-  </svg>
-
   <div class="photo-paper">
     <Image
       src={portrait}
@@ -27,25 +18,26 @@ const frontWire = "M8 18a10 10 0 0 1 20 0v34a6 6 0 0 1-12 0V23";
     />
   </div>
 
-  <svg class="paperclip front" viewBox="0 0 42 76" aria-hidden="true">
-    <path class="wire-edge" d={frontWire} />
-    <path class="wire-body" d={frontWire} />
-    <path class="wire-light" d={frontWire} />
-  </svg>
+  <!-- 透明图层包含回形针与阴影；照片仍单独渲染。 -->
+  <img
+    class="paperclip"
+    src={paperclip.src}
+    width={paperclip.width}
+    height={paperclip.height}
+    alt=""
+    decoding="async"
+  />
 </figure>
 
 <style>
   .profile-photo {
     position: relative;
-    isolation: isolate;
     width: 10rem;
     margin: 0;
     transform: rotate(1.5deg);
   }
 
   .photo-paper {
-    position: relative;
-    z-index: 1;
     padding: 6px 6px 15px;
     border: 1px solid rgb(52 57 63 / 8%);
     border-radius: 2px;
@@ -55,7 +47,7 @@ const frontWire = "M8 18a10 10 0 0 1 20 0v34a6 6 0 0 1-12 0V23";
       1px 7px 13px -8px rgb(24 32 40 / 30%);
   }
 
-  img {
+  .photo-paper img {
     display: block;
     width: 100%;
     height: auto;
@@ -63,41 +55,12 @@ const frontWire = "M8 18a10 10 0 0 1 20 0v34a6 6 0 0 1-12 0V23";
 
   .paperclip {
     position: absolute;
-    top: -13px;
-    right: 16px;
-    width: 31px;
+    /* 图层内的纸顶位于第 16px，对齐相纸上沿。 */
+    top: -16px;
+    right: 5px;
+    width: 48px;
     height: auto;
-    overflow: visible;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transform: rotate(12deg);
     pointer-events: none;
-  }
-
-  .back {
-    z-index: 0;
-  }
-
-  .front {
-    z-index: 2;
-    filter: drop-shadow(0.6px 0.8px 0.6px rgb(0 0 0 / 25%));
-  }
-
-  .wire-edge {
-    stroke: #7e878d;
-    stroke-width: 3.8;
-  }
-
-  .wire-body {
-    stroke: #c6cdd1;
-    stroke-width: 2.5;
-  }
-
-  .wire-light {
-    stroke: #f4f6f7;
-    stroke-width: 0.7;
-    transform: translate(-0.5px, -0.3px);
   }
 
   :global([data-theme="dark"]) .photo-paper {
