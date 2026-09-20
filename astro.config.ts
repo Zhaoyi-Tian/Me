@@ -4,6 +4,8 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { unified } from "@astrojs/markdown-remark";
 import rehypeCallouts from "rehype-callouts";
+import remarkMath from "remark-math";
+import { rehypeMath } from "./src/utils/rehypeMath";
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
@@ -17,7 +19,8 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   markdown: {
     processor: unified({
-      rehypePlugins: [rehypeCallouts],
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [rehypeCallouts, rehypeMath],
     }),
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },
