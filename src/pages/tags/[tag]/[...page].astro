@@ -10,6 +10,7 @@ import Pagination from "@/components/Pagination.astro";
 import { getUniqueTags } from "@/utils/getUniqueTags";
 import { getPosts } from "@/utils/getPosts";
 import { slugifyAll } from "@/utils/slugify";
+import { withBase } from "@/utils/withBase";
 import ui from "@/ui";
 import config from "@/astro-paper.config";
 
@@ -36,7 +37,12 @@ const { page, tagName } = Astro.props;
 <Layout title={`${ui.pages.tagTitle}: ${tagName} | ${config.site.title}`}>
   <Header />
 
-  <Breadcrumb />
+  <Breadcrumb
+    parents={[{ label: ui.pages.tagsTitle, href: withBase("tags/") }]}
+    current={page.currentPage === 1
+      ? tagName
+      : `${tagName} (${ui.pagination.page.toLowerCase()} ${page.currentPage})`}
+  />
 
   <Main
     pageTitle={`${ui.pages.tagTitle}: ${tagName}`}

@@ -17,7 +17,7 @@ const tags = getUniqueTags(posts);
 <Layout title={`${ui.pages.tagsTitle} | ${config.site.title}`}>
   <Header />
 
-  <Breadcrumb />
+  <Breadcrumb current={ui.pages.tagsTitle} />
 
   <Main pageTitle={ui.pages.tagsTitle} pageDesc={ui.pages.tagsDesc}>
     {

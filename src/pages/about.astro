@@ -24,7 +24,7 @@ const { Content } = await render(about);
 >
   <Header />
 
-  <Breadcrumb />
+  <Breadcrumb current={about.data.title} />
 
   <Main pageTitle={about.data.title} class="app-prose">
     <div class="about-content">

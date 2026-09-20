@@ -22,7 +22,9 @@ const { page } = Astro.props;
 <Layout title={`${ui.pages.postsTitle} | ${config.site.title}`}>
   <Header />
 
-  <Breadcrumb />
+  <Breadcrumb
+    current={`${ui.pages.postsTitle} (${ui.pagination.page.toLowerCase()} ${page.currentPage})`}
+  />
 
   <Main pageTitle={ui.pages.postsTitle} pageDesc={ui.pages.postsDesc}>
     {
