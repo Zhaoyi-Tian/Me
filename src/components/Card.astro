@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getPostUrl } from "@/utils/getPostUrl";
-import { toTransitionName } from "@/utils/toTransitionName";
 import Datetime from "./Datetime.astro";
 
 type Props = {
@@ -22,7 +21,7 @@ const { slug, title, description, pubDatetime } = data;
       "focus-visible:no-underline focus-visible:underline-offset-0",
     ]}
   >
-    <Heading transition:name={toTransitionName(slug)}>
+    <Heading transition:name={`post-${slug}`}>
       {title}
     </Heading>
   </a>
