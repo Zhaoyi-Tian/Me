@@ -7,9 +7,7 @@ export default {
     description: "Welcome, noble and pure soul.",
     author: "Zhaoyi Tian",
     profile: "https://zhaoyi-tian.cn/about/",
-    lang: "en",
     timezone: "Asia/Shanghai",
-    dir: "ltr",
   },
   posts: {
     perPage: 4,

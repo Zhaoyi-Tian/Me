@@ -12,9 +12,7 @@ export interface AstroPaperConfig {
     description: string;
     author: string;
     profile: string;
-    lang: string;
     timezone: string;
-    dir: "ltr" | "rtl" | "auto";
   };
   posts: {
     perPage: number;
