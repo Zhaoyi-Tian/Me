@@ -23,7 +23,7 @@ const tags = getUniqueTags(posts);
     {
       tags.length > 0 ? (
         <ul class="flex flex-wrap gap-6">
-          {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} />)}
+          {tags.map(tag => <Tag {tag} />)}
         </ul>
       ) : (
         <p>{ui.pages.noPosts}</p>

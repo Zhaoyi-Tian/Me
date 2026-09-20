@@ -1,25 +1,19 @@
 import type { CollectionEntry } from "astro:content";
-import { slugifyStr } from "./slugify";
 
-type Tag = {
-  tag: string;
-  tagName: string;
-};
-
-/**
- * Builds a de-duplicated, sorted tag list from posts.
- *
- * - `tag` is the slug used in URLs; `tagName` is the original label for display
- * - Uniqueness is based on the slug (so differently-cased labels collapse)
- */
+/** Collect exact tag names without rewriting or merging different spellings. */
 export function getUniqueTags(posts: CollectionEntry<"posts">[]) {
-  const tags: Tag[] = posts
-    .flatMap(post => post.data.tags)
-    .map(tag => ({ tag: slugifyStr(tag), tagName: tag }))
-    .filter(
-      (value, index, self) =>
-        self.findIndex(tag => tag.tag === value.tag) === index
-    )
-    .sort((tagA, tagB) => tagA.tag.localeCompare(tagB.tag));
-  return tags;
+  const tags = [...new Set(posts.flatMap(post => post.data.tags))];
+  const paths = new Map<string, string>();
+  for (const tag of tags) {
+    // Astro normalizes Unicode; macOS directories also ignore letter case.
+    const path = tag.normalize().toLowerCase();
+    const previous = paths.get(path);
+    if (previous !== undefined) {
+      throw new Error(
+        `Tag URL conflict: "${previous}" and "${tag}". Use one exact spelling or distinct names.`
+      );
+    }
+    paths.set(path, tag);
+  }
+  return tags.sort((a, b) => a.localeCompare(b));
 }

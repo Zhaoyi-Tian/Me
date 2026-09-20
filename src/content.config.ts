@@ -22,7 +22,21 @@ const posts = defineCollection({
       pubDatetime: z.date(),
       title: z.string(),
       featured: z.boolean().optional(),
-      tags: z.array(z.string()).default([]),
+      tags: z
+        .array(
+          z.string().refine(
+            tag =>
+              tag.trim().length > 0 &&
+              tag !== "." &&
+              tag !== ".." &&
+              !/[\/\\?#%\u0000-\u001f\u007f]/.test(tag),
+            {
+              message:
+                "Tags must be non-empty names, not . or .., and cannot contain /, \\, ?, #, %, or control characters",
+            }
+          )
+        )
+        .default([]),
       ogImage: image().or(z.string()),
       description: z.string(),
     }),

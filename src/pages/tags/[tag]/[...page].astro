@@ -9,7 +9,6 @@ import Footer from "@/components/Footer.astro";
 import Pagination from "@/components/Pagination.astro";
 import { getUniqueTags } from "@/utils/getUniqueTags";
 import { getPosts } from "@/utils/getPosts";
-import { slugifyAll } from "@/utils/slugify";
 import { withBase } from "@/utils/withBase";
 import ui from "@/ui";
 import config from "@/astro-paper.config";
@@ -18,35 +17,33 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getPosts();
   const tags = getUniqueTags(posts);
 
-  return tags.flatMap(({ tag, tagName }) => {
-    const tagPosts = posts.filter(({ data }) =>
-      slugifyAll(data.tags).includes(tag)
-    );
+  return tags.flatMap(tag => {
+    const tagPosts = posts.filter(({ data }) => data.tags.includes(tag));
 
     return paginate(tagPosts, {
       params: { tag },
-      props: { tagName },
+      props: { tag },
       pageSize: config.posts.perPage,
     });
   });
 }
 
-const { page, tagName } = Astro.props;
+const { page, tag } = Astro.props;
 ---
 
-<Layout title={`${ui.pages.tagTitle}: ${tagName} | ${config.site.title}`}>
+<Layout title={`${ui.pages.tagTitle}: ${tag} | ${config.site.title}`}>
   <Header />
 
   <Breadcrumb
     parents={[{ label: ui.pages.tagsTitle, href: withBase("tags/") }]}
     current={page.currentPage === 1
-      ? tagName
-      : `${tagName} (${ui.pagination.page.toLowerCase()} ${page.currentPage})`}
+      ? tag
+      : `${tag} (${ui.pagination.page.toLowerCase()} ${page.currentPage})`}
   />
 
   <Main
-    pageTitle={`${ui.pages.tagTitle}: ${tagName}`}
-    pageDesc={`${ui.pages.tagDesc} "${tagName}".`}
+    pageTitle={`${ui.pages.tagTitle}: ${tag}`}
+    pageDesc={`${ui.pages.tagDesc} "${tag}".`}
   >
     <ul>
       {page.data.map(data => <Card {...data} />)}
