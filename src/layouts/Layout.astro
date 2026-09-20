@@ -76,8 +76,6 @@ const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
         const root = document.firstElementChild;
         root?.setAttribute("data-theme", theme);
         root?.classList.toggle("dark", theme === "dark");
-        // Expose value so theme.ts can skip re-detection.
-        window.__theme = { value: theme };
       })();
     </script>
 

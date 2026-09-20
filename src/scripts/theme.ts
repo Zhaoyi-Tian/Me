@@ -1,29 +1,15 @@
 const THEME_KEY = "theme";
 const LIGHT = "light";
 const DARK = "dark";
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 
-function getPreferredTheme(): string {
-  const stored = localStorage.getItem(THEME_KEY);
-  if (stored) return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? DARK
-    : LIGHT;
-}
-
-// Reuse the value already set by the inline FOUC-prevention script if available.
-let themeValue: string =
-  (window as unknown as { __theme?: { value: string } }).__theme?.value ??
-  getPreferredTheme();
-
-function persist(): void {
-  localStorage.setItem(THEME_KEY, themeValue);
-  reflect();
-}
+// The head script sets the initial theme before the first paint.
+let themeValue = document.documentElement.dataset.theme!;
 
 function reflect(): void {
-  const root = document.firstElementChild;
-  root?.setAttribute("data-theme", themeValue);
-  root?.classList.toggle("dark", themeValue === DARK);
+  const root = document.documentElement;
+  root.setAttribute("data-theme", themeValue);
+  root.classList.toggle("dark", themeValue === DARK);
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 
   // Fill <meta name="theme-color"> with the computed background colour so
@@ -38,7 +24,8 @@ function setup(): void {
   reflect();
   document.querySelector("#theme-btn")?.addEventListener("click", () => {
     themeValue = themeValue === LIGHT ? DARK : LIGHT;
-    persist();
+    localStorage.setItem(THEME_KEY, themeValue);
+    reflect();
   });
 }
 
@@ -60,10 +47,9 @@ document.addEventListener("astro:before-swap", event => {
   }
 });
 
-// Sync with OS-level dark/light preference changes.
-window
-  .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", ({ matches }) => {
-    themeValue = matches ? DARK : LIGHT;
-    persist();
-  });
+// Follow the system only until the reader explicitly chooses a theme.
+systemTheme.addEventListener("change", ({ matches }) => {
+  if (localStorage.getItem(THEME_KEY) !== null) return;
+  themeValue = matches ? DARK : LIGHT;
+  reflect();
+});
