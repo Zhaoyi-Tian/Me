@@ -33,6 +33,7 @@ export default {
 
     tagsTitle: "Tags",
     tagsDesc: "All the tags used in posts.",
+    noTags: "No tags yet.",
 
     postsTitle: "Writing",
     postsDesc: "All the articles I've posted.",

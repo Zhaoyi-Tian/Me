@@ -13,19 +13,9 @@ import config from "@/astro-paper.config";
 
 const { site } = config;
 
-// Strip the base prefix so isActive comparisons work regardless of deploy subdirectory.
-// e.g. with base "/blog": "/blog/posts/slug" → "/posts/slug"
-const relativePath = stripBase(Astro.url.pathname);
-const currentPath =
-  relativePath.endsWith("/") && relativePath !== "/"
-    ? relativePath.slice(0, -1)
-    : relativePath;
-
-const isActive = (path: string) => {
-  const currentPathArray = currentPath.split("/").filter(p => p.trim());
-  const pathArray = path.split("/").filter(p => p.trim());
-  return currentPath === path || currentPathArray[0] === pathArray[0];
-};
+const currentPath = stripBase(Astro.url.pathname);
+const isActive = (path: string) =>
+  currentPath === path || currentPath.startsWith(`${path}/`);
 ---
 
 <a

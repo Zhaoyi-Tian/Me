@@ -26,7 +26,7 @@ const tags = getUniqueTags(posts);
           {tags.map(tag => <Tag {tag} />)}
         </ul>
       ) : (
-        <p>{ui.pages.noPosts}</p>
+        <p>{ui.pages.noTags}</p>
       )
     }
   </Main>

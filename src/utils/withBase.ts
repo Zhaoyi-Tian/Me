@@ -13,8 +13,7 @@ export function stripBase(pathname: string): string {
     return "/";
   }
   if (pathname.startsWith(baseRoot)) {
-    const stripped = pathname.slice(base.length);
-    return stripped === "" ? "/" : stripped;
+    return pathname.slice(base.length);
   }
   return pathname;
 }
