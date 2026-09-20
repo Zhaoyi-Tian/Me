@@ -1,7 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import siteOgImage from "@/assets/images/site-og.jpg";
-import { getAssetPath } from "@/utils/withBase";
+import { withBase } from "@/utils/withBase";
 import config from "@/astro-paper.config";
 import "@/styles/global.css";
 
@@ -28,13 +28,13 @@ const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
 <!doctype html>
 <html
   dir={site.dir}
-  lang={Astro.currentLocale ?? site.lang}
+  lang={site.lang}
   class="overflow-y-scroll scroll-smooth"
 >
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href={getAssetPath("favicon.svg")} />
+    <link rel="icon" type="image/svg+xml" href={withBase("favicon.svg")} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
 
@@ -43,7 +43,7 @@ const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content={site.author} />
-    <link rel="sitemap" href={getAssetPath("sitemap-index.xml")} />
+    <link rel="sitemap" href={withBase("sitemap-index.xml")} />
 
     <!-- Open Graph -->
     <meta property="og:type" content={ogType} />

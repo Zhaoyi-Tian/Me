@@ -1,5 +1,3 @@
-import type { UIStrings } from "../types";
-
 export default {
   nav: {
     home: "Home",
@@ -11,8 +9,6 @@ export default {
   post: {
     tableOfContents: "Contents",
     sharePostIntro: "Share this post:",
-    sharePostOn: "Share this post on {{platform}}",
-    sharePostViaEmail: "Share this post via email",
     backToTop: "Back to top",
     goBack: "Go back",
     previousPost: "Previous Post",
@@ -59,4 +55,4 @@ export default {
     message: "Page Not Found",
     goHome: "Go back home",
   },
-} satisfies UIStrings;
+};

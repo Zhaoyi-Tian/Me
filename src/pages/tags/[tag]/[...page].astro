@@ -10,7 +10,7 @@ import Pagination from "@/components/Pagination.astro";
 import { getUniqueTags } from "@/utils/getUniqueTags";
 import { getPosts } from "@/utils/getPosts";
 import { slugifyAll } from "@/utils/slugify";
-import { useTranslations } from "@/i18n";
+import ui from "@/ui";
 import config from "@/astro-paper.config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
@@ -31,19 +31,16 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 }
 
 const { page, tagName } = Astro.props;
-
-const locale = Astro.currentLocale ?? config.site.lang;
-const t = useTranslations(locale);
 ---
 
-<Layout title={`${t.pages.tagTitle}: ${tagName} | ${config.site.title}`}>
+<Layout title={`${ui.pages.tagTitle}: ${tagName} | ${config.site.title}`}>
   <Header />
 
   <Breadcrumb />
 
   <Main
-    pageTitle={`${t.pages.tagTitle}: ${tagName}`}
-    pageDesc={`${t.pages.tagDesc} "${tagName}".`}
+    pageTitle={`${ui.pages.tagTitle}: ${tagName}`}
+    pageDesc={`${ui.pages.tagDesc} "${tagName}".`}
   >
     <ul>
       {page.data.map(data => <Card {...data} />)}

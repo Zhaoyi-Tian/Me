@@ -3,12 +3,12 @@
 // Changes: two heading levels, responsive disclosure, and visible-range indicators.
 // Source: https://github.com/cworld1/astro-theme-pure — see licenses/astro-theme-pure.txt.
 import type { MarkdownHeading } from "astro";
-import { useTranslations } from "@/i18n";
+import ui from "@/ui";
 
 type Props = { headings: MarkdownHeading[] };
 
 const { headings } = Astro.props;
-const label = useTranslations(Astro.currentLocale).post.tableOfContents;
+const label = ui.post.tableOfContents;
 ---
 
 <post-toc class="not-prose" hidden data-pagefind-ignore>

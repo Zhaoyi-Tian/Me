@@ -5,25 +5,21 @@ import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
-import { getAssetPath } from "@/utils/withBase";
+import { withBase } from "@/utils/withBase";
 import { getPosts } from "@/utils/getPosts";
-import { useTranslations } from "@/i18n";
+import ui from "@/ui";
 import config from "@/astro-paper.config";
 
-const locale = Astro.currentLocale ?? config.site.lang;
-
-const pagefindBundlePath = getAssetPath("pagefind/");
+const pagefindBundlePath = withBase("pagefind/");
 const hasPosts = (await getPosts()).length > 0;
-
-const t = useTranslations(locale);
 ---
 
-<Layout title={`${t.pages.searchTitle} | ${config.site.title}`}>
+<Layout title={`${ui.pages.searchTitle} | ${config.site.title}`}>
   <Header />
 
   <Breadcrumb />
 
-  <Main pageTitle={t.pages.searchTitle} pageDesc={t.pages.searchDesc}>
+  <Main pageTitle={ui.pages.searchTitle} pageDesc={ui.pages.searchDesc}>
     {
       hasPosts ? (
         <div
@@ -33,7 +29,7 @@ const t = useTranslations(locale);
           data-bundle-path={pagefindBundlePath}
         />
       ) : (
-        <p>{t.pages.noPosts}</p>
+        <p>{ui.pages.noPosts}</p>
       )
     }
   </Main>

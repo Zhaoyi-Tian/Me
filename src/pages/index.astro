@@ -1,5 +1,4 @@
 ---
-import { getRelativeLocaleUrl } from "astro:i18n";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -9,19 +8,16 @@ import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import ProfilePhoto from "@/components/ProfilePhoto.astro";
 import { getPosts } from "@/utils/getPosts";
-import { getAssetPath } from "@/utils/withBase";
-import { useTranslations } from "@/i18n";
+import { withBase } from "@/utils/withBase";
+import ui from "@/ui";
 import config from "@/astro-paper.config";
 
 const { socials, posts: postsConfig } = config;
 
-const locale = Astro.currentLocale ?? config.site.lang;
-const t = useTranslations(locale);
-
 const posts = await getPosts();
 const featuredPosts = posts.filter(({ data }) => data.featured);
 const recentPosts = posts.filter(({ data }) => !data.featured);
-const homePath = getRelativeLocaleUrl(locale, "");
+const homePath = withBase("");
 ---
 
 <Layout>
@@ -50,7 +46,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
         <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
           {socials.length > 0 && <Socials />}
           <LinkButton
-            href={getAssetPath("cv.pdf")}
+            href={withBase("cv.pdf")}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View CV (PDF, opens in a new tab)"
@@ -60,7 +56,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
             CV
           </LinkButton>
           <LinkButton
-            href={getRelativeLocaleUrl(locale, "about")}
+            href={withBase("about/")}
             class="text-sm"
           >
             More about me
@@ -83,7 +79,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
           ]}
         >
           <h2 class="text-2xl font-semibold tracking-wide">
-            {t.home.featured}
+            {ui.home.featured}
           </h2>
           <ul>
             {featuredPosts.map(data => (
@@ -98,7 +94,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
       recentPosts.length > 0 && (
         <section id="recent-posts" class="pt-12 pb-6">
           <h2 class="text-2xl font-semibold tracking-wide">
-            {t.home.recentPosts}
+            {ui.home.recentPosts}
           </h2>
           <ul>
             {recentPosts.slice(0, postsConfig.perIndex).map(data => (
@@ -112,8 +108,8 @@ const homePath = getRelativeLocaleUrl(locale, "");
     {
       posts.length > 0 && (
         <div class="my-8 text-center">
-          <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>
-            {t.home.allPosts}
+          <LinkButton href={withBase("posts/")}>
+            {ui.home.allPosts}
             <IconArrowRight class="inline-block rtl:-rotate-180" />
           </LinkButton>
         </div>

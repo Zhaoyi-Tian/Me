@@ -15,13 +15,6 @@ import config from "./astro-paper.config";
 export default defineConfig({
   site: config.site.url,
   integrations: [mdx(), sitemap()],
-  i18n: {
-    locales: ["en"],
-    defaultLocale: "en",
-    routing: {
-      prefixDefaultLocale: false,
-    },
-  },
   markdown: {
     processor: unified({
       rehypePlugins: [rehypeCallouts],
