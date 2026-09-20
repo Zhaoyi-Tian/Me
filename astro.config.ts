@@ -24,7 +24,7 @@ export default defineConfig({
       defaultColor: false,
       wrap: false,
       transformers: [
-        transformerFileName({ style: "v2", hideDot: false }),
+        transformerFileName(),
         transformerNotationHighlight(),
         transformerNotationWordHighlight(),
         transformerNotationDiff({ matchAlgorithm: "v3" }),

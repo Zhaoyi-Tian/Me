@@ -20,11 +20,9 @@ function setupCodeCopy(article: HTMLElement, signal: AbortSignal) {
     block.before(wrapper);
     wrapper.append(block);
 
-    const hasFileNameOffset =
-      getComputedStyle(block).getPropertyValue("--file-name-offset").trim() !== "";
     const button = document.createElement("button");
     button.type = "button";
-    button.className = `copy-code absolute end-3 ${hasFileNameOffset ? "top-(--file-name-offset)" : "-top-3"} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+    button.className = "copy-code absolute end-3 -top-3 rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium";
     button.textContent = "Copy";
     block.tabIndex = 0;
     block.append(button);
