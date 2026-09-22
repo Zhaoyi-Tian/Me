@@ -16,7 +16,13 @@ import config from "./astro-paper.config";
 
 export default defineConfig({
   site: config.site.url,
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      // Interview is shared directly, not listed with the public pages.
+      filter: page => !/^\/interview\/?$/.test(new URL(page).pathname),
+    }),
+  ],
   markdown: {
     processor: unified({
       remarkPlugins: [remarkMath],

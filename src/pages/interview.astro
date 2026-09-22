@@ -1,0 +1,153 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import config from "@/astro-paper.config";
+
+const interview = await getEntry("pages", "interview");
+
+if (!interview) {
+  throw new Error("Missing content entry: src/content/pages/interview.mdx");
+}
+
+const { Content } = await render(interview);
+---
+
+<Layout
+  title={`${interview.data.title} | ${config.site.title}`}
+  description={interview.data.description}
+>
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <Header />
+  <Breadcrumb current={interview.data.title} />
+
+  <Main pageTitle={interview.data.title}>
+    <article class="interview-content app-prose max-w-none" lang="zh-CN">
+      <Content />
+    </article>
+  </Main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .interview-content :global(> h2) {
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 1.375rem;
+    line-height: 1.5;
+  }
+
+  .interview-content :global(h3) {
+    margin-top: 2rem;
+    font-size: 1.0625rem;
+    font-style: normal;
+  }
+
+  .interview-content :global(.project-summary) {
+    display: grid;
+    gap: 1.5rem;
+    margin-block: 2rem 0;
+  }
+
+  .interview-content :global(.project-photo) {
+    grid-row: 1;
+    margin-block: 0.75rem;
+  }
+
+  .interview-content :global(.project-overview) {
+    min-width: 0;
+  }
+
+  .interview-content :global(.project-overview h2) {
+    margin-top: 0;
+    font-size: 1.125rem;
+  }
+
+  .interview-content :global(.project-overview section + section) {
+    margin-top: 1.5rem;
+  }
+
+  .interview-content :global(.project-overview p),
+  .interview-content :global(.project-overview ul) {
+    margin-block: 0.5rem;
+  }
+
+  .interview-content :global(.project-meta) {
+    margin-top: -0.25rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+
+  .interview-content :global(.project-table table) {
+    font-variant-numeric: tabular-nums;
+    line-height: 1.65;
+  }
+
+  .interview-content :global(.project-table th) {
+    padding-block: 0.625rem;
+    background: var(--muted);
+  }
+
+  .interview-content :global(.project-results table) {
+    min-width: 0;
+  }
+
+  .interview-content :global(.project-comparison table) {
+    min-width: 44rem;
+  }
+
+  .interview-content :global(.project-comparison td:nth-child(2)) {
+    white-space: nowrap;
+  }
+
+  .interview-content :global(.project-prompt) {
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .interview-content :global(.project-prompt summary) {
+    padding-block: 0.875rem;
+    font-weight: 600;
+  }
+
+  .interview-content :global(.project-prompt summary::marker) {
+    color: var(--accent);
+  }
+
+  .interview-content :global(.prompt-block),
+  .interview-content :global(.prompt-list) {
+    margin-block: 0.25rem 1.25rem;
+  }
+
+  .interview-content :global(.prompt-en),
+  .interview-content :global(.prompt-zh) {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .interview-content :global(.prompt-zh) {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .interview-content :global(.prompt-list > li + li) {
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .interview-content :global(.project-summary) {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 2.5rem;
+    }
+
+    .interview-content :global(.project-photo) {
+      grid-row: auto;
+    }
+  }
+</style>

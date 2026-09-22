@@ -4,7 +4,7 @@ import portrait from "@/assets/images/profile.jpg";
 import paperclip from "@/assets/images/paperclip.webp";
 ---
 
-<figure class="profile-photo">
+<figure class="profile-photo not-prose">
   <div class="photo-paper">
     <Image
       src={portrait}
@@ -35,6 +35,12 @@ import paperclip from "@/assets/images/paperclip.webp";
     width: 10rem;
     margin: 0;
     transform: rotate(1.5deg);
+  }
+
+  /* Keep article typography from adding margins or borders to the image layers. */
+  .profile-photo img {
+    margin: 0;
+    border: 0;
   }
 
   .photo-paper {
