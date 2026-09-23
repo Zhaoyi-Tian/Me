@@ -42,16 +42,6 @@ const recentPosts = posts.filter(({ data }) => !data.featured);
         <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
           {socials.length > 0 && <Socials />}
           <LinkButton
-            href={withBase("cv.pdf")}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="View CV (PDF, opens in a new tab)"
-            title="CV (PDF)"
-            class="text-sm"
-          >
-            CV
-          </LinkButton>
-          <LinkButton
             href={withBase("about/")}
             class="text-sm"
           >
