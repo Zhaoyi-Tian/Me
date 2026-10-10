@@ -21,8 +21,8 @@ export default {
     },
     {
       name: "mail",
-      url: "mailto:503761171@qq.com",
-      linkTitle: "Email: 503761171@qq.com",
+      url: "mailto:2400013763@stu.pku.edu.cn",
+      linkTitle: "Email: 2400013763@stu.pku.edu.cn",
     },
   ],
   shareLinks: [
