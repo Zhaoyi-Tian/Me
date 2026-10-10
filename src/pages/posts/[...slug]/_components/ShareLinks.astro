@@ -1,4 +1,5 @@
 ---
+import IconLink from "@/assets/icons/IconLink.svg";
 import SocialLink from "@/components/SocialLink.astro";
 import ui from "@/ui";
 import config from "@/astro-paper.config";
@@ -8,22 +9,55 @@ const { shareLinks } = config;
 const pageUrl = Astro.url;
 ---
 
-{
-  shareLinks.length > 0 && (
-    <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start">
-      <span class="italic">{ui.post.sharePostIntro}</span>
-      <div class="text-center">
-        {shareLinks.map(({ name, url, linkTitle }) => (
-          <SocialLink
-            icon={name}
-            href={`${url}${pageUrl}`}
-            class="scale-90"
-            title={linkTitle}
-            target="_blank"
-            rel="noopener noreferrer"
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
+<div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start">
+  <span class="italic">{ui.post.sharePostIntro}</span>
+  <div class="flex items-center">
+    {shareLinks.map(({ name, url, linkTitle }) => (
+      <SocialLink
+        icon={name}
+        href={`${url}${pageUrl}`}
+        class="scale-90"
+        title={linkTitle}
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+    ))}
+    <!-- 微信等不在分享列表里的去处，直接复制地址。 -->
+    <button
+      id="copy-link"
+      type="button"
+      class="hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"
+      title={ui.post.copyLink}
+      data-url={pageUrl.href}
+    >
+      <IconLink class="inline-block size-6 scale-125 opacity-90 sm:scale-110" aria-hidden="true" />
+      <span class="sr-only">{ui.post.copyLink}</span>
+    </button>
+    <span id="copy-link-status" class="text-sm" role="status"></span>
+  </div>
+</div>
+
+<script>
+  import ui from "@/ui";
+
+  function setupCopyLink() {
+    const button = document.querySelector<HTMLButtonElement>("#copy-link");
+    const status = document.querySelector("#copy-link-status");
+    if (!button || !status) return;
+
+    let timer: number | undefined;
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.url ?? location.href);
+        status.textContent = ui.post.linkCopied;
+      } catch {
+        status.textContent = ui.post.copyLinkFailed;
+      }
+      clearTimeout(timer);
+      timer = window.setTimeout(() => (status.textContent = ""), 2000);
+    });
+  }
+
+  setupCopyLink();
+  document.addEventListener("astro:after-swap", setupCopyLink);
+</script>

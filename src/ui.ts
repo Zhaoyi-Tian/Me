@@ -9,6 +9,9 @@ export default {
   post: {
     tableOfContents: "Contents",
     sharePostIntro: "Share this post:",
+    copyLink: "Copy link",
+    linkCopied: "Link copied",
+    copyLinkFailed: "Copy failed",
     backToTop: "Back to top",
     previousPost: "Previous Post",
     nextPost: "Next Post",
