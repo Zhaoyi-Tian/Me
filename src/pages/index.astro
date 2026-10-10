@@ -38,7 +38,7 @@ const recentPosts = posts.filter(({ data }) => !data.featured);
           I'm currently interning at Norizon AI, exploring real-time RSI.
         </p>
         <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
-          {socials.length > 0 && <Socials />}
+          {socials.length > 0 && <Socials class="-ms-2 sm:-ms-1" />}
           <LinkButton
             href={withBase("about/")}
             class="text-sm"
@@ -100,7 +100,7 @@ const recentPosts = posts.filter(({ data }) => !data.featured);
       )
     }
   </main>
-  <Footer />
+  <Footer hideSocials />
 </Layout>
 
 <style>

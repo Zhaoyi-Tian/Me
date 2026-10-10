@@ -1,13 +1,20 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import Socials from "./Socials.astro";
-import ui from "@/ui";
+import config from "@/astro-paper.config";
 
 type Props = {
   noMarginTop?: boolean;
+  /** 首页介绍区已有同一组社交链接时隐藏。 */
+  hideSocials?: boolean;
 } & HTMLAttributes<"footer">;
 
-const { noMarginTop = false, class: className, ...attrs } = Astro.props;
+const {
+  noMarginTop = false,
+  hideSocials = false,
+  class: className,
+  ...attrs
+} = Astro.props;
 
 const currentYear = new Date().getFullYear();
 ---
@@ -17,13 +24,11 @@ const currentYear = new Date().getFullYear();
   {...attrs}
 >
   <div
-    class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"
+    class="border-border flex flex-col-reverse items-center justify-between border-t py-6 sm:flex-row sm:py-4"
   >
-    <Socials />
-    <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
-      <span>{ui.footer.copyright} &#169; {currentYear}</span>
-      <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
-      <span>{ui.footer.allRightsReserved}</span>
-    </div>
+    <span class="my-2 whitespace-nowrap">
+      &#169; {currentYear} {config.site.author}
+    </span>
+    {!hideSocials && <Socials />}
   </div>
 </footer>

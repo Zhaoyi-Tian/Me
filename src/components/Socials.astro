@@ -1,11 +1,16 @@
 ---
 import config from "@/astro-paper.config";
+import type { HTMLAttributes } from "astro/types";
 import SocialLink from "./SocialLink.astro";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className } = Astro.props;
 
 const { socials } = config;
 ---
 
-<div class="flex flex-wrap items-center gap-1">
+<div class:list={["flex flex-wrap items-center gap-1", className]}>
   {
     socials.map(({ name, url, linkTitle }) => (
       <SocialLink icon={name} href={url} title={linkTitle} />
