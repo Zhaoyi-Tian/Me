@@ -5,6 +5,7 @@ import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconTag from "@/assets/icons/IconTag.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
+import IconPaperclip from "@/assets/icons/IconPaperclip.svg";
 import IconX from "@/assets/icons/IconX.svg";
 import LinkButton from "./LinkButton.astro";
 import { stripBase, withBase } from "@/utils/withBase";
@@ -14,6 +15,8 @@ import config from "@/astro-paper.config";
 const { site } = config;
 
 const currentPath = stripBase(Astro.url.pathname);
+// 首页介绍区已有大号名字，标识只留回形针。
+const isHome = currentPath === "/";
 const isActive = (path: string) =>
   currentPath === path || currentPath.startsWith(`${path}/`);
 ---
@@ -34,9 +37,15 @@ const isActive = (path: string) =>
   >
     <a
       href={withBase("")}
-      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+      class="group absolute flex h-10 items-center gap-2 text-xl font-semibold whitespace-nowrap sm:static sm:my-auto sm:h-8 sm:text-2xl"
+      aria-label={isHome ? `${site.author}, home` : undefined}
     >
-      {site.title}
+      <IconPaperclip
+        aria-hidden="true"
+        transition:name="site-clip"
+        class="size-7 transition-transform group-hover:rotate-12 motion-reduce:transition-none motion-reduce:group-hover:rotate-0"
+      />
+      {!isHome && <span class="leading-none font-bold" transition:name="site-name">{site.author}</span>}
     </a>
     <nav
       id="nav-menu"

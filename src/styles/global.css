@@ -39,3 +39,17 @@
 :target {
   scroll-margin-block: 1rem;
 }
+
+/* 名字在首页大标题与顶部署名之间移动。 */
+::view-transition-group(site-name) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
