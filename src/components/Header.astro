@@ -37,13 +37,13 @@ const isActive = (path: string) =>
   >
     <a
       href={withBase("")}
-      class="group absolute flex h-10 items-center gap-2 text-xl font-semibold whitespace-nowrap sm:static sm:my-auto sm:h-8 sm:text-2xl"
+      class="hover:text-accent absolute flex h-10 items-center gap-2 text-xl font-semibold whitespace-nowrap sm:static sm:my-auto sm:h-8 sm:text-2xl"
       aria-label={isHome ? `${site.author}, home` : undefined}
     >
       <IconPaperclip
         aria-hidden="true"
         transition:name="site-clip"
-        class="size-7 transition-transform group-hover:rotate-12 motion-reduce:transition-none motion-reduce:group-hover:rotate-0"
+        class="size-7"
       />
       {!isHome && <span class="leading-none font-bold" transition:name="site-name">{site.author}</span>}
     </a>
